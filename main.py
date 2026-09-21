@@ -25,6 +25,7 @@ def main():
             }
         ]
     )
+    
 
     print(" Answer from the model:",  response.choices[0].message.content)
 
