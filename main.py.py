@@ -47,13 +47,21 @@ def main():
 
     parser = argparse.ArgumentParser(description="Chatbot")
     parser.add_argument("user_prompt", type=str, help="Message to send to the chatbot")
+    parser.add_argument("--verbose", action="store_true", help="Enable verbose output")
     args = parser.parse_args()
 
     generated_content, prompt_tokens, response_tokens = generate_content(client, [{"role": "user", "content": args.user_prompt}])
 
-    print(f"Prompt tokens: {prompt_tokens}")
-    print(f"Response tokens: {response_tokens}")
-    print(" Answer from the model:", generated_content)
+
+    
+    if args.verbose:
+        print(f"User prompt: {args.user_prompt}")
+        print(f"Prompt tokens: {prompt_tokens}")
+        print(f"Response tokens: {response_tokens}")
+
+    print("Answer from the model:", generated_content)
+   
+        
 
 
 if __name__ == "__main__":
