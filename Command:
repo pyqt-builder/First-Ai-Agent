@@ -1,0 +1,30 @@
+STDOUT:
+Calculator App
+Usage: python main.py "<expression>"
+Example: python main.py "3 + 5"
+
+
+
+STDOUT:
+{
+  "expression": "3 + 5",
+  "result": 8
+}
+
+
+
+STDERR:
+.........
+----------------------------------------------------------------------
+Ran 9 tests in 0.001s
+
+OK
+
+
+
+Error: Cannot execute "../main.py" as it is outside the permitted working directory
+
+Error: Cannot run "noneexistent.py" does not exist
+
+Error: Cannot run "lorem.txt" is not a Python file
+
