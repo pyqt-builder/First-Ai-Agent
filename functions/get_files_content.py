@@ -14,6 +14,29 @@ def get_file_content(working_directory: str, file_path: str) -> str:
         return file_content
     except Exception as e:
         return f"Error: reading file: {e}"
+
+
+schema_get_files_content = {
+    "type": "function",
+    "function": {
+        "name" : "get_file_content",
+        "description": " Reads the given File Content up to a maximum character limit // which is set in config.py",
+        "parameters" : {
+            "type": "object",
+            "properties": {
+                "working_directory": {
+                    "type": "string",
+                    "description": "The working directory"
+                },
+                "file_path": {
+                    "type": "string",
+                    "description": "The path to the file to read"
+                }
+            },
+            "required": ["working_directory", "file_path"]
+        }
+    }
+}
        
 
         

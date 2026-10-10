@@ -22,3 +22,17 @@ def test() -> None:
 
 if __name__ == "__main__":
     test()
+
+
+
+
+
+
+
+
+if message.tool_calls:
+     for tool_call in messages.tool_calls:
+             function_args = json.loads(tool_call.function.arguments or "{}")
+             print(f"Calling function: {tool_call.function.name}({function_args})")
+else:
+     print(generated_content = response.choices[0].message.content)

@@ -14,7 +14,7 @@ def run_python_file(working_directory: str, file_path: str, args:list[str] | Non
         if not os.path.isfile(absolut_file_path):
             return f'Error: Cannot run "{file_path}" does not exist'
 
-        command =["python" , absolut_file_path]
+        command =["python3" , absolut_file_path]
         if args:
             command.extend(args)
 
@@ -33,11 +33,35 @@ def run_python_file(working_directory: str, file_path: str, args:list[str] | Non
         return output 
             
            
-        return output
+        
     except Exception as e:
         return f"Error: running file: {e}"
 
-       
+
+
+schema_run_python_file = {
+    "type": "function",
+    "function": {
+        "name": "run_python_file",
+        "description": "Executes a specified Python file within the working directory and returns its output",
+        "parameters": {
+            "type": "object",
+            "properties": {
+                "file_path": {
+                    "type": "string",
+                    "description": "Path to the Python file to run, relative to the working directory",
+                },
+                "args": {
+                    "type": "array",
+                    "items": {"type": "string"},
+                    "description": "Optional list of arguments to pass to the Python script",
+                },
+            },
+            "required": ["file_path"],
+        },
+    },
+}
+  
         
           
             

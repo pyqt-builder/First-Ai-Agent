@@ -20,6 +20,31 @@ def write_file(working_directory: str, file_path: str, content: str) -> str:
 
      except Exception as e:
           return f"Error: writing file: {e}"
-          
-        
-                
+
+
+
+schema_write_file = {
+    "type": "function",
+    "function": {
+        "name": "write_file",
+        "description": "Writes content to a file in the specified working directory and returns a success or error message",
+        "parameters": {
+            "type": "object",
+            "properties": {
+                "working_directory": {
+                    "type": "string",
+                    "description": "The working directory"
+                },
+                "file_path": {
+                    "type": "string",
+                    "description": "The path to the file to write"
+                },
+                "content": {
+                    "type": "string",
+                    "description": "The content to write to the file"
+                }
+            },
+            "required": ["working_directory", "file_path", "content"]
+        }
+    }
+}
