@@ -1,8 +1,9 @@
-import os, argparse ,json 
+import os, argparse ,json, sys
 from dotenv import load_dotenv
 from openai import OpenAI   
 from prompts import system_prompt
 from call_function import available_functions ,call_function
+from config import MAX_ITERATIONS
 
 
 
@@ -42,32 +43,45 @@ def main() -> None:
 
 
 def generate_content(client: OpenAI, messages: list, verbose: bool) -> None:
-    response = client.chat.completions.create(
-        model="openrouter/free",
-        messages=messages,
-        tools=available_functions,
-    )
-    if not response.usage:
-        raise RuntimeError("API response appears to be malformed")
+   
+    for iteration in range(MAX_ITERATIONS):
+        response = client.chat.completions.create(
+                    model="openrouter/free",
+                    messages=messages,
+                    tools=available_functions,
+                        ) 
+            
+        if not response.usage:
+            raise RuntimeError("API response appears to be malformed")
+                
+        
+        if verbose:
+            print("Prompt tokens:", response.usage.prompt_tokens)
+            print("Response tokens:", response.usage.completion_tokens)
 
-    if verbose:
-        print("Prompt tokens:", response.usage.prompt_tokens)
-        print("Response tokens:", response.usage.completion_tokens)
+        message = response.choices[0].message
+        if not message.tool_calls:
+            print("Response:")
+            print(message.content)
+            return
 
-    message = response.choices[0].message
-    if not message.tool_calls:
-        print("Response:")
-        print(message.content)
-        return
+        messages.append(message.model_dump(exclude_none=True))
 
-    for tool_call in message.tool_calls:
-        if tool_call.type != "function":
-            continue
-        result_message = call_function(tool_call, verbose)
-        if not result_message.get("content"):
-            raise RuntimeError(f"Empty function response for {tool_call.function.name}")
+        for tool_call in message.tool_calls:
+            if tool_call.type != "function":
+                continue
+            result_message = call_function(tool_call, verbose)
+            if not result_message.get("content"):
+                raise RuntimeError(f"Empty function response for {tool_call.function.name}")
+            messages.append(result_message)
+
         if verbose:
             print(f"-> {result_message['content']}")
+
+    raise RuntimeError(f"Maximum iterations ({MAX_ITERATIONS}) reached without a final response")
+
+
+   
 
 
 if __name__ == "__main__":
